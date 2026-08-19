@@ -1,0 +1,77 @@
+{
+  "signal_version": "v1",
+  "production_rule": {
+    "conservative": {
+      "opportunity": "HIGH OPPORTUNITY",
+      "confidence_min": 80
+    },
+    "broad": {
+      "opportunity": "HIGH OPPORTUNITY",
+      "confidence_max": 80
+    },
+    "no_signal": "ALL OTHER TRANSACTIONS"
+  },
+  "production": {
+    "rows": 91,
+    "conservative": 44,
+    "broad": 47,
+    "no_signal": 0,
+    "date_range": {
+      "start": null,
+      "end": null
+    }
+  },
+  "backtest": {
+    "rows": 50457,
+    "date_range": {
+      "start": "2026-01-01T16:21:33",
+      "end": "2026-08-17T13:46:51"
+    },
+    "signal_counts": {
+      "NO SIGNAL": 50395,
+      "CONSERVATIVE OPPORTUNITY": 35,
+      "BROAD OPPORTUNITY": 27
+    },
+    "performance": {
+      "conservative": {
+        "transactions": 35,
+        "median_return_pct": 46.69165511437365,
+        "mean_return_pct": 56.95940207448431,
+        "positive_rate_pct": 100.0,
+        "above_10_pct_rate": 97.14285714285714
+      },
+      "broad": {
+        "transactions": 27,
+        "median_return_pct": 28.55282230374858,
+        "mean_return_pct": 27.789325921167556,
+        "positive_rate_pct": 81.48148148148148,
+        "above_10_pct_rate": 66.66666666666666
+      },
+      "no_signal": {
+        "transactions": 50395,
+        "median_return_pct": -4.0109467969173807e-07,
+        "mean_return_pct": 0.6505642825751058,
+        "positive_rate_pct": 48.63776168270662,
+        "above_10_pct_rate": 9.143764262327613
+      }
+    }
+  },
+  "model": {
+    "type": "XGBoost",
+    "objective": "reg:squarederror",
+    "feature_count": 12,
+    "learning_rate": 0.03,
+    "max_depth": 6,
+    "n_estimators": 2000,
+    "min_child_weight": 10,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 5.0,
+    "random_state": 42
+  },
+  "dashboard": {
+    "purpose": "Production opportunity monitoring and validated signal analysis",
+    "horizon_days": 30
+  }
+}

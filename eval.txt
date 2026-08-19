@@ -1,0 +1,143 @@
+DUBAI REAL ESTATE AVM — MODEL EVALUATION SUMMARY
+==================================================
+
+Evaluation objective
+--------------------
+Estimate Dubai residential property transaction value using property
+characteristics and recent area/project comparable-sales features.
+
+Target
+------
+log_price = log(TRANS_VALUE)
+
+Primary evaluation metrics
+--------------------------
+MAE  = Mean Absolute Error
+RMSE = Root Mean Squared Error
+R²   = Coefficient of Determination
+MdAPE = Median Absolute Percentage Error
+Within ±10% = share of predictions within 10% of actual value
+Within ±20% = share of predictions within 20% of actual value
+
+Important:
+"Within ±10%" and "Within ±20%" are accuracy-style measures for
+continuous valuation. They are NOT classification accuracy.
+
+MODEL COMPARISON
+================
+
+| Model | MAE (AED) | RMSE (AED) | R² | MdAPE | Within ±10% | Within ±20% |
+|---|---:|---:|---:|---:|---:|---:|
+| Ridge Baseline (1A) | 284,763.71 | 1,560,856.71 | 0.7413 | 7.92% | 58.19% | 80.43% |
+| Ridge + Log Target + History (1B) | 241,464.94 | 1,485,365.46 | 0.7657 | 7.08% | 62.79% | 85.07% |
+| XGBoost AVM (final) | 214,975.47 | 1,019,776.49 | 0.8896 | 6.24% | 67.99% | 86.50% |
+| XGBoost Native-Categorical Experiment | 228,770.81 | 1,335,055.39 | 0.8107 | 6.37% | 66.82% | 87.00% |
+
+FINAL MODEL
+===========
+
+Model: XGBoost Regressor
+Target: log_price
+Best iteration: 986
+R²: 0.8896
+MAE: AED 214,975.47
+RMSE: AED 1,019,776.49
+Median Absolute Percentage Error: 6.24%
+Predictions within ±10% of actual: 67.99%
+Predictions within ±20% of actual: 86.50%
+
+Interpretation
+--------------
+- The final XGBoost model explains approximately 88.96% of the variance
+  in the held-out target values.
+- Typical percentage error is better represented by the MdAPE of 6.24%.
+- About 68.0% of predictions fall within ±10% of the actual value.
+- About 86.5% fall within ±20% of the actual value.
+- The XGBoost model materially outperformed the two Ridge baselines on
+  MAE, RMSE, R², MdAPE, and the ±10% accuracy-style metric.
+
+MODEL IMPROVEMENT
+=================
+
+Ridge Baseline -> Final XGBoost
+
+MAE improvement:
+AED 284,763.71 -> AED 214,975.47
+Absolute improvement: AED 69,788.24
+Approx. relative improvement: 24.51%
+
+RMSE improvement:
+AED 1,560,856.71 -> AED 1,019,776.49
+Absolute improvement: AED 541,080.22
+Approx. relative improvement: 34.66%
+
+R² improvement:
+0.7413 -> 0.8896
+Absolute improvement: 0.1483
+
+MdAPE improvement:
+7.92% -> 6.24%
+Absolute improvement: 1.68 percentage points
+Approx. relative improvement: 21.21%
+
+Within ±10%:
+58.19% -> 67.99%
+Improvement: 9.80 percentage points
+
+Within ±20%:
+80.43% -> 86.50%
+Improvement: 6.07 percentage points
+
+
+FEATURES USED BY FINAL MODEL
+============================
+
+1. log_area_sqft
+2. bedrooms
+3. parking_count
+4. is_offplan
+5. is_freehold
+6. area_90d_median_ppsf
+7. project_90d_median_ppsf
+8. log_area_90d_count
+9. log_project_90d_count
+10. project_history_available
+11. AREA_EN
+12. PROJECT_EN
+
+DATASET / VALIDATION CONTEXT
+============================
+
+Historical modelling dataframe: 79,123 transactions
+Clean backtest universe: 74,252 transactions
+Transactions with future 30-day comparable signal: 63,206
+Transactions with >=3 future comparables: 50,457
+
+The valuation model uses point-in-time historical comparable features.
+Future 30-day information is used only for the separate opportunity
+backtest and is not used as an input to the valuation model.
+
+IMPORTANT LIMITATIONS
+=====================
+
+1. Continuous prediction accuracy is not uniform across all properties.
+   Individual estimates can have substantially larger errors than the
+   median error.
+
+2. The final XGBoost performance above is an offline held-out evaluation.
+   It should not be interpreted as a guarantee of future property values.
+
+3. The Streamlit inference layer still requires further verification of
+   exact training-time comparable-feature reconstruction before the app
+   should be described as production-grade AVM infrastructure.
+
+4. The opportunity signal is a separate downstream research layer and
+   should not be confused with valuation accuracy.
+
+Resume/interview-safe summary
+=============================
+
+"Compared Ridge baselines with XGBoost for Dubai property valuation.
+The final XGBoost model achieved R² = 0.8896, MAE ≈ AED 215K, MdAPE =
+6.24%, with 67.99% of predictions within ±10% and 86.50% within ±20%
+on the held-out evaluation set."

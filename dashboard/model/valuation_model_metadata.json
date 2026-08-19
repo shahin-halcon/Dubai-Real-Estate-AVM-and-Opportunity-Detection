@@ -1,0 +1,17 @@
+{
+  "model_type": "<class 'xgboost.sklearn.XGBRegressor'>",
+  "feature_names": [
+    "log_area_sqft",
+    "bedrooms",
+    "parking_count",
+    "is_offplan",
+    "is_freehold",
+    "area_90d_median_ppsf",
+    "project_90d_median_ppsf",
+    "log_area_90d_count",
+    "log_project_90d_count",
+    "project_history_available",
+    "AREA_EN",
+    "PROJECT_EN"
+  ]
+}
